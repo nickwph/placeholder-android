@@ -1,8 +1,9 @@
-package com.nicholasworkshop.placeholder
+package com.nicholasworkshop.placeholder.activity
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import com.nicholasworkshop.placeholder.R
 import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : AppCompatActivity() {

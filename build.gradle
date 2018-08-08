@@ -1,6 +1,7 @@
 buildscript {
     ext.roomVersion = '1.1.1'
     ext.kotlinVersion = '1.2.51'
+    ext.androidSupportVersion = '27.1.1'
     repositories {
         google()
         jcenter()

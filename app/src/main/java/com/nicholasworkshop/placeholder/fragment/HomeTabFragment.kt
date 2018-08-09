@@ -17,6 +17,7 @@ import com.nicholasworkshop.placeholder.R
 import com.nicholasworkshop.placeholder.model.MainDatabase
 import com.nicholasworkshop.placeholder.model.UserDao
 import com.nicholasworkshop.placeholder.utility.DaoViewModel
+import com.nicholasworkshop.placeholder.utility.disableShiftMode
 import kotlinx.android.synthetic.main.fragment_hometab.*
 import javax.inject.Inject
 
@@ -53,6 +54,7 @@ class HomeTabFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val userId = arguments!!.getLong(ARG_ID)
         bottomNavigationView.setOnNavigationItemSelectedListener(NavigationItemSelectedListener())
+        bottomNavigationView.disableShiftMode()
         viewModel = DaoViewModel.newInstance(this, UserDao::class.java, mainDatabase.userDao())
         viewModel.dao.findById(userId).observe(this, Observer {
             (activity as AppCompatActivity).supportActionBar!!.title = it?.name

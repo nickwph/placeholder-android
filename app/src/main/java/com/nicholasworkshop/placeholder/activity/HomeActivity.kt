@@ -3,7 +3,7 @@ package com.nicholasworkshop.placeholder.activity
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.nicholasworkshop.placeholder.R
-import com.nicholasworkshop.placeholder.fragment.TabFragment
+import com.nicholasworkshop.placeholder.fragment.UserFragment
 
 class HomeActivity : AppCompatActivity() {
 
@@ -11,7 +11,7 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         supportFragmentManager.beginTransaction()
-                .replace(R.id.containerView, TabFragment())
+                .replace(R.id.containerView, UserFragment())
                 .commit()
     }
 }

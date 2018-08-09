@@ -50,7 +50,7 @@ class UserController : Typed2EpoxyController<List<User>, Boolean>() {
             Timber.e("data user $user")
             viewUserItem {
                 id(user.id)
-                name(user.name)
+                user(user)
             }
         }
     }

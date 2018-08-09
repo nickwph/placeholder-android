@@ -9,6 +9,7 @@ import android.arch.persistence.room.RoomDatabase
             User::class,
             Photo::class,
             Post::class,
+            ToDo::class,
             Album::class])
 abstract class MainDatabase : RoomDatabase() {
 
@@ -19,4 +20,6 @@ abstract class MainDatabase : RoomDatabase() {
     abstract fun photoDao(): PhotoDao
 
     abstract fun postDao(): PostDao
+
+    abstract fun toDoDao(): ToDoDao
 }

@@ -12,5 +12,5 @@ fun parse(photo: com.nicholasworkshop.placeholder.api.Photo): Photo {
 }
 
 fun parse(photoList: List<com.nicholasworkshop.placeholder.api.Photo>): List<Photo> {
-    return photoList.map { parse(it) }
+    return photoList.map(::parse)
 }

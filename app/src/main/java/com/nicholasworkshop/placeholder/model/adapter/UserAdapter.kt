@@ -22,5 +22,5 @@ fun parse(user: com.nicholasworkshop.placeholder.api.User): User {
 }
 
 fun parse(userList: List<com.nicholasworkshop.placeholder.api.User>): List<User> {
-    return userList.map { parse(it) }
+    return userList.map(::parse)
 }

@@ -72,6 +72,12 @@ class HomeTabFragment : Fragment() {
                             .commit()
                     return true
                 }
+                R.id.navigation_todos -> {
+                    childFragmentManager.beginTransaction()
+                            .replace(R.id.contentView, ToDoFragment.newInstance(userId))
+                            .commit()
+                    return true
+                }
             }
             return false
         }

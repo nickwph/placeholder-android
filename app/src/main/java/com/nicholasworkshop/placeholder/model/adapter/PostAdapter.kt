@@ -11,5 +11,5 @@ fun parse(post: com.nicholasworkshop.placeholder.api.Post): Post {
 }
 
 fun parse(postList: List<com.nicholasworkshop.placeholder.api.Post>): List<Post> {
-    return postList.map { parse(it) }
+    return postList.map(::parse)
 }

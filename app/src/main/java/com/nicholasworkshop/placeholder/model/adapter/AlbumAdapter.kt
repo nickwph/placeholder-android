@@ -10,5 +10,5 @@ fun parse(album: com.nicholasworkshop.placeholder.api.Album): Album {
 }
 
 fun parse(albumList: List<com.nicholasworkshop.placeholder.api.Album>): List<Album> {
-    return albumList.map { parse(it) }
+    return albumList.map(::parse)
 }

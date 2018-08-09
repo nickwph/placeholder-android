@@ -24,4 +24,6 @@ interface MainComponent {
     fun inject(homeTabFragment: HomeTabFragment)
 
     fun inject(postFragment: PostFragment)
+
+    fun inject(toDoFragment: ToDoFragment)
 }

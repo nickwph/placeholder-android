@@ -1,11 +1,9 @@
 package com.nicholasworkshop.placeholder.fragment
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +11,9 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.nicholasworkshop.placeholder.MainApplication
 import com.nicholasworkshop.placeholder.R
 import com.nicholasworkshop.placeholder.api.PostService
+import com.nicholasworkshop.placeholder.model.MainDatabase
 import com.nicholasworkshop.placeholder.model.Post
 import com.nicholasworkshop.placeholder.model.PostDao
-import com.nicholasworkshop.placeholder.model.MainDatabase
-import com.nicholasworkshop.placeholder.model.UserDao
 import com.nicholasworkshop.placeholder.model.adapter.parse
 import com.nicholasworkshop.placeholder.utility.DaoViewModel
 import com.nicholasworkshop.placeholder.viewPostItem
@@ -58,6 +55,7 @@ class PostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val userId = arguments?.getLong(ARG_ID)!!
         epoxyRecyclerView.setController(postController)
+        epoxyRecyclerView.layoutManager = LinearLayoutManager(context)
         viewModel = DaoViewModel.newInstance(this, PostDao::class.java, mainDatabase.postDao())
         viewModel.dao.findByUserId(userId).observe(this, Observer {
             postController.setData(it)

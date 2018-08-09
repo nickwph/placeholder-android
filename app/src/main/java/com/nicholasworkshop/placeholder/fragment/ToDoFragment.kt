@@ -3,6 +3,7 @@ package com.nicholasworkshop.placeholder.fragment
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,6 +55,7 @@ class ToDoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val userId = arguments?.getLong(ARG_ID)!!
         epoxyRecyclerView.setController(toDoController)
+        epoxyRecyclerView.layoutManager = LinearLayoutManager(context)
         viewModel = DaoViewModel.newInstance(this, ToDoDao::class.java, mainDatabase.toDoDao())
         viewModel.dao.findByUserId(userId).observe(this, Observer {
             toDoController.setData(it)

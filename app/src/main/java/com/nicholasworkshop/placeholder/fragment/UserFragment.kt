@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,6 +44,7 @@ class UserFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (activity as AppCompatActivity).supportActionBar!!.title = "Select a user"
         epoxyRecyclerView.setController(userController)
+        epoxyRecyclerView.layoutManager = LinearLayoutManager(context)
         viewModel = DaoViewModel.newInstance(this, UserDao::class.java, mainDatabase.userDao())
         viewModel.dao.all().observe(this, Observer {
             userController.setData(it)
@@ -50,20 +52,6 @@ class UserFragment : Fragment() {
         userService.getUserList()
                 .subscribeOn(Schedulers.io())
                 .subscribe { mainDatabase.userDao().insertAll(parse(it)) }
-    }
-
-    class UserViewModel(
-            val userDao: UserDao
-    ) : ViewModel() {
-
-        @Suppress("UNCHECKED_CAST")
-        class Factory(
-                private val userDao: UserDao
-        ) : ViewModelProvider.NewInstanceFactory() {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return UserViewModel(userDao) as T
-            }
-        }
     }
 
     inner class UserEpoxyController : TypedEpoxyController<List<User>>() {

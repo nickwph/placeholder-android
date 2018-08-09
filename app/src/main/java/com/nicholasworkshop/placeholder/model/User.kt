@@ -32,7 +32,7 @@ interface UserDao {
     fun all(): LiveData<List<User>>
 
     @Query("SELECT * FROM user WHERE id = :id LIMIT 1")
-    fun findById(id: String): User
+    fun findById(id: Long): User
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(userList: List<User>): List<Long>

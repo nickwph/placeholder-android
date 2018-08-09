@@ -2,6 +2,7 @@ package com.nicholasworkshop.placeholder
 
 import com.nicholasworkshop.placeholder.api.ApiModule
 import com.nicholasworkshop.placeholder.fragment.AlbumFragment
+import com.nicholasworkshop.placeholder.fragment.HomeTabFragment
 import com.nicholasworkshop.placeholder.fragment.PhotoFragment
 import com.nicholasworkshop.placeholder.fragment.UserFragment
 import com.nicholasworkshop.placeholder.model.DatabaseModule
@@ -22,4 +23,6 @@ interface MainComponent {
     fun inject(userFragment: AlbumFragment)
 
     fun inject(photoFragment: PhotoFragment)
+
+    fun inject(homeTabFragment: HomeTabFragment)
 }

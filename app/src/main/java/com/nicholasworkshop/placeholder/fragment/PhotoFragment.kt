@@ -21,6 +21,9 @@ import com.nicholasworkshop.placeholder.viewPhotoItem
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_photo.*
 import javax.inject.Inject
+import android.support.v7.widget.GridLayoutManager
+
+
 
 
 class PhotoFragment : Fragment() {
@@ -55,7 +58,12 @@ class PhotoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val albumId = arguments?.getLong(ARG_ID)!!
+        val spanCount = 2
+        val layoutManager = GridLayoutManager(context, spanCount)
+        photoController.spanCount = spanCount
         epoxyRecyclerView.setController(photoController)
+        layoutManager.spanSizeLookup = photoController.spanSizeLookup
+        epoxyRecyclerView.layoutManager = layoutManager
         viewModel = ViewModelProviders
                 .of(this, PhotoViewModel.Factory(mainDatabase.photoDao()))
                 .get(PhotoViewModel::class.java)

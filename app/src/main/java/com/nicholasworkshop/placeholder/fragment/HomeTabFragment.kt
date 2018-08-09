@@ -58,14 +58,18 @@ class HomeTabFragment : Fragment() {
 
     inner class NavigationItemSelectedListener : BottomNavigationView.OnNavigationItemSelectedListener {
         override fun onNavigationItemSelected(item: MenuItem): Boolean {
+            val userId = arguments!!.getLong(ARG_ID)
             when (item.itemId) {
-                R.id.navigation_home -> {
+                R.id.navigation_albums -> {
+                    childFragmentManager.beginTransaction()
+                            .replace(R.id.contentView, AlbumFragment.newInstance(userId))
+                            .commit()
                     return true
                 }
-                R.id.navigation_dashboard -> {
-                    return true
-                }
-                R.id.navigation_notifications -> {
+                R.id.navigation_posts -> {
+                    childFragmentManager.beginTransaction()
+                            .replace(R.id.contentView, PostFragment.newInstance(userId))
+                            .commit()
                     return true
                 }
             }

@@ -8,9 +8,6 @@
         <variable
             name="user"
             type="com.nicholasworkshop.placeholder.model.User" />
-        <variable
-            name="mapClickListener"
-            type="android.view.View.OnClickListener" />
     </data>
 
     <LinearLayout
@@ -117,8 +114,7 @@
             android:layout_height="wrap_content"
             android:text="Open in map"
             app:latitude="@{user.addressGeoLat}"
-            app:longitude="@{user.addressGeoLng}"
-            app:mapClickListener="@{mapClickListener}" />
+            app:longitude="@{user.addressGeoLng}" />
 
     </LinearLayout>
 

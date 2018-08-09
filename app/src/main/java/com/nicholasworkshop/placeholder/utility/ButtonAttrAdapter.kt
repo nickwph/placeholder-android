@@ -9,8 +9,8 @@ import android.widget.Button
 import android.widget.Toast
 
 
-@BindingAdapter("mapClickListener", "latitude", "longitude")
-fun setMapClickListener(button: Button, mapClickListener: View.OnClickListener?, latitude: String?, longitude: String?) {
+@BindingAdapter("latitude", "longitude")
+fun setMapClickListener(button: Button, latitude: String?, longitude: String?) {
     button.setOnClickListener {
         try {
             val uri = "geo:$latitude,$longitude"

@@ -1,5 +1,9 @@
 package com.nicholasworkshop.placeholder.fragment
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
@@ -11,9 +15,7 @@ import android.view.ViewGroup
 import com.nicholasworkshop.placeholder.MainApplication
 import com.nicholasworkshop.placeholder.R
 import com.nicholasworkshop.placeholder.model.MainDatabase
-import io.reactivex.Observable.fromCallable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.nicholasworkshop.placeholder.model.UserDao
 import kotlinx.android.synthetic.main.fragment_hometab.*
 import javax.inject.Inject
 
@@ -35,6 +37,8 @@ class HomeTabFragment : Fragment() {
 
     @Inject lateinit var mainDatabase: MainDatabase
 
+    private lateinit var viewModel: UserViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity!!.application as MainApplication).component.inject(this)
@@ -44,15 +48,18 @@ class HomeTabFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_hometab, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val userId = arguments!!.getLong(ARG_ID)
-        fromCallable { mainDatabase.userDao().findById(userId) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { (activity as AppCompatActivity).supportActionBar!!.title = it.name }
         bottomNavigationView.setOnNavigationItemSelectedListener(NavigationItemSelectedListener())
+        viewModel = ViewModelProviders
+                .of(this, UserViewModel.Factory(mainDatabase.userDao()))
+                .get(UserViewModel::class.java)
+        viewModel.userDao.findById(userId).observe(this, Observer {
+            (activity as AppCompatActivity).supportActionBar!!.title = it?.name
+        })
         childFragmentManager.beginTransaction()
-                .replace(R.id.contentView, AlbumFragment.newInstance(userId))
+                .replace(R.id.contentView, UserDetailFragment.newInstance(userId))
                 .commit()
     }
 
@@ -60,6 +67,12 @@ class HomeTabFragment : Fragment() {
         override fun onNavigationItemSelected(item: MenuItem): Boolean {
             val userId = arguments!!.getLong(ARG_ID)
             when (item.itemId) {
+                R.id.navigation_home -> {
+                    childFragmentManager.beginTransaction()
+                            .replace(R.id.contentView, UserDetailFragment.newInstance(userId))
+                            .commit()
+                    return true
+                }
                 R.id.navigation_albums -> {
                     childFragmentManager.beginTransaction()
                             .replace(R.id.contentView, AlbumFragment.newInstance(userId))
@@ -80,6 +93,20 @@ class HomeTabFragment : Fragment() {
                 }
             }
             return false
+        }
+    }
+
+    class UserViewModel(
+            val userDao: UserDao
+    ) : ViewModel() {
+
+        @Suppress("UNCHECKED_CAST")
+        class Factory(
+                private val userDao: UserDao
+        ) : ViewModelProvider.NewInstanceFactory() {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return UserViewModel(userDao) as T
+            }
         }
     }
 }

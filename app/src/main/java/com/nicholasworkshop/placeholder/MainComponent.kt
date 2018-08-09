@@ -26,4 +26,6 @@ interface MainComponent {
     fun inject(postFragment: PostFragment)
 
     fun inject(toDoFragment: ToDoFragment)
+
+    fun inject(userDetailFragment: UserDetailFragment)
 }

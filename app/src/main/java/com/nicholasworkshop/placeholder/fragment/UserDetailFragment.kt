@@ -11,6 +11,7 @@ import com.nicholasworkshop.placeholder.databinding.FragmentUserdetailBinding
 import com.nicholasworkshop.placeholder.model.MainDatabase
 import com.nicholasworkshop.placeholder.model.UserDao
 import com.nicholasworkshop.placeholder.utility.DaoViewModel
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -51,5 +52,9 @@ class UserDetailFragment : Fragment() {
             binding.user = it
             binding.executePendingBindings()
         })
+    }
+
+    fun mapClickListener(lat: String, lng: String) {
+        Timber.e("hihi $lat $lng")
     }
 }

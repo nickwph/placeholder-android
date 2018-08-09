@@ -39,7 +39,4 @@ interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(user: User): Long
-
-    @Delete
-    fun delete(friend: User)
 }

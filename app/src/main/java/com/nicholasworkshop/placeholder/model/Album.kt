@@ -26,7 +26,4 @@ interface AlbumDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(album: Album): Long
-
-    @Delete
-    fun delete(friend: Album)
 }

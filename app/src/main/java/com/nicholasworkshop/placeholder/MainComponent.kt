@@ -1,10 +1,7 @@
 package com.nicholasworkshop.placeholder
 
 import com.nicholasworkshop.placeholder.api.ApiModule
-import com.nicholasworkshop.placeholder.fragment.AlbumFragment
-import com.nicholasworkshop.placeholder.fragment.HomeTabFragment
-import com.nicholasworkshop.placeholder.fragment.PhotoFragment
-import com.nicholasworkshop.placeholder.fragment.UserFragment
+import com.nicholasworkshop.placeholder.fragment.*
 import com.nicholasworkshop.placeholder.model.DatabaseModule
 import com.nicholasworkshop.placeholder.model.MainDatabase
 import dagger.Component
@@ -25,4 +22,6 @@ interface MainComponent {
     fun inject(photoFragment: PhotoFragment)
 
     fun inject(homeTabFragment: HomeTabFragment)
+
+    fun inject(postFragment: PostFragment)
 }

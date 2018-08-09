@@ -28,7 +28,4 @@ interface PhotoDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(photo: Photo): Long
-
-    @Delete
-    fun delete(friend: Photo)
 }

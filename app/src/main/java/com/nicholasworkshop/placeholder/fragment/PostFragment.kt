@@ -75,7 +75,7 @@ class PostFragment : Fragment() {
                     clickListener { v ->
                         fragmentManager!!.beginTransaction()
                                 .addToBackStack(null)
-                                .replace(R.id.contentView, PhotoFragment.newInstance(post.id))
+                                .replace(R.id.contentView, CommentFragment.newInstance(post.id))
                                 .commit()
                     }
                 }

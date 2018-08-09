@@ -28,4 +28,6 @@ interface MainComponent {
     fun inject(toDoFragment: ToDoFragment)
 
     fun inject(userDetailFragment: UserDetailFragment)
+
+    fun inject(commentFragment: CommentFragment)
 }

@@ -8,6 +8,7 @@ import android.arch.persistence.room.RoomDatabase
         entities = [
             User::class,
             Photo::class,
+            Comment::class,
             Post::class,
             ToDo::class,
             Album::class])
@@ -22,4 +23,6 @@ abstract class MainDatabase : RoomDatabase() {
     abstract fun postDao(): PostDao
 
     abstract fun toDoDao(): ToDoDao
+
+    abstract fun commentDao(): CommentDao
 }

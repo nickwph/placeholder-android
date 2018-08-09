@@ -6,7 +6,7 @@
     <data>
         <variable
             name="album"
-            type="com.nicholasworkshop.placeholder.api.Album" />
+            type="com.nicholasworkshop.placeholder.model.Album" />
         <variable
             name="clickListener"
             type="android.view.View.OnClickListener" />

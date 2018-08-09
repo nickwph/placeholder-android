@@ -50,9 +50,8 @@ class UserFragment : Fragment() {
         })
         userService.getUserList()
                 .subscribeOn(Schedulers.io())
-                .subscribe { viewModel.userDao.insertAll(parse(it)) }
+                .subscribe { mainDatabase.userDao().insertAll(parse(it)) }
     }
-
 
     class UserViewModel(
             val userDao: UserDao
@@ -72,12 +71,10 @@ class UserFragment : Fragment() {
 
         override fun buildModels(users: List<User>) {
             for (user in users) {
-                Timber.e("data user $user")
                 viewUserItem {
                     id(user.id)
                     user(user)
                     clickListener { v ->
-                        Timber.e("hi user $user")
                         fragmentManager!!.beginTransaction()
                                 .addToBackStack(null)
                                 .replace(R.id.containerView, HomeTabFragment.newInstance(user.id))

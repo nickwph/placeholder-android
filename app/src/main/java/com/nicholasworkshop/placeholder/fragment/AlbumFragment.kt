@@ -1,5 +1,9 @@
 package com.nicholasworkshop.placeholder.fragment
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -8,13 +12,14 @@ import android.view.ViewGroup
 import com.airbnb.epoxy.TypedEpoxyController
 import com.nicholasworkshop.placeholder.MainApplication
 import com.nicholasworkshop.placeholder.R
-import com.nicholasworkshop.placeholder.api.Album
 import com.nicholasworkshop.placeholder.api.AlbumService
+import com.nicholasworkshop.placeholder.model.Album
+import com.nicholasworkshop.placeholder.model.AlbumDao
+import com.nicholasworkshop.placeholder.model.MainDatabase
+import com.nicholasworkshop.placeholder.model.adapter.parse
 import com.nicholasworkshop.placeholder.viewAlbumItem
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_user.*
-import timber.log.Timber
+import kotlinx.android.synthetic.main.fragment_album.*
 import javax.inject.Inject
 
 
@@ -34,8 +39,10 @@ class AlbumFragment : Fragment() {
     }
 
     @Inject lateinit var albumService: AlbumService
+    @Inject lateinit var mainDatabase: MainDatabase
 
-    private val albumController = AlbumController()
+    private lateinit var viewModel: AlbumViewModel
+    private val albumController = AlbumEpoxyController()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,27 +54,44 @@ class AlbumFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val userId = arguments?.getLong(ARG_ID)
+        val userId = arguments?.getLong(ARG_ID)!!
         epoxyRecyclerView.setController(albumController)
-        albumService.getAlbumList(userId = userId)
+        viewModel = ViewModelProviders
+                .of(this, AlbumViewModel.Factory(mainDatabase.albumDao()))
+                .get(AlbumViewModel::class.java)
+        viewModel.albumDao.findByUserId(userId).observe(this, Observer {
+            albumController.setData(it)
+        })
+        albumService.getAlbumList()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { albumController.setData(it) }
+                .subscribe { mainDatabase.albumDao().insertAll(parse(it)) }
     }
 
-    inner class AlbumController : TypedEpoxyController<List<Album>>() {
+    class AlbumViewModel(
+            val albumDao: AlbumDao
+    ) : ViewModel() {
+
+        @Suppress("UNCHECKED_CAST")
+        class Factory(
+                private val albumDao: AlbumDao
+        ) : ViewModelProvider.NewInstanceFactory() {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return AlbumViewModel(albumDao) as T
+            }
+        }
+    }
+
+    inner class AlbumEpoxyController : TypedEpoxyController<List<Album>>() {
 
         override fun buildModels(albums: List<Album>) {
             for (album in albums) {
-                Timber.e("data user $album")
                 viewAlbumItem {
                     id(album.id)
                     album(album)
                     clickListener { v ->
-                        Timber.e("hi user $album")
                         fragmentManager!!.beginTransaction()
                                 .addToBackStack(null)
-                                .replace(R.id.containerView, HomeTabFragment())
+//                                .replace(R.id.containerView, HomeTabFragment.newInstance(album.id))
                                 .commit()
                     }
                 }

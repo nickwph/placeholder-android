@@ -8,28 +8,27 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import com.nicholasworkshop.placeholder.R
-import kotlinx.android.synthetic.main.fragment_tab.*
+import kotlinx.android.synthetic.main.fragment_hometab.*
 
 
-class TabFragment : Fragment() {
-
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//    }
+class HomeTabFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_tab, container, false)
+        return inflater.inflate(R.layout.fragment_hometab, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         bottomNavigationView.setOnNavigationItemSelectedListener(NavigationItemSelectedListener())
+        childFragmentManager.beginTransaction()
+                .replace(R.id.contentView, UserDetailFragment())
+                .commit()
     }
 
-    class NavigationItemSelectedListener : BottomNavigationView.OnNavigationItemSelectedListener {
+    inner class NavigationItemSelectedListener : BottomNavigationView.OnNavigationItemSelectedListener {
         override fun onNavigationItemSelected(item: MenuItem): Boolean {
             when (item.itemId) {
                 R.id.navigation_home -> {
-
+//
                     return true
                 }
                 R.id.navigation_dashboard -> {

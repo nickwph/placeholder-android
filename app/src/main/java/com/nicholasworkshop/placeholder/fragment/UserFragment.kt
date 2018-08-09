@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.epoxy.Typed2EpoxyController
+import com.airbnb.epoxy.TypedEpoxyController
 import com.nicholasworkshop.placeholder.MainApplication
 import com.nicholasworkshop.placeholder.R
 import com.nicholasworkshop.placeholder.api.User
@@ -37,14 +37,12 @@ class UserFragment : Fragment() {
         userService.getUserList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    userController.setData(it, false)
-                }
+                .subscribe { userController.setData(it) }
     }
 
-    inner class UserController : Typed2EpoxyController<List<User>, Boolean>() {
+    inner class UserController : TypedEpoxyController<List<User>>() {
 
-        override fun buildModels(users: List<User>, loadingMore: Boolean) {
+        override fun buildModels(users: List<User>) {
             for (user in users) {
                 Timber.e("data user $user")
                 viewUserItem {
@@ -54,7 +52,7 @@ class UserFragment : Fragment() {
                         Timber.e("hi user $user")
                         fragmentManager!!.beginTransaction()
                                 .addToBackStack(null)
-                                .replace(R.id.containerView, HomeTabFragment())
+                                .replace(R.id.containerView, HomeTabFragment.newInstance(user.id!!))
                                 .commit()
                     }
                 }

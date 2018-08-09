@@ -1,6 +1,7 @@
 package com.nicholasworkshop.placeholder
 
 import com.nicholasworkshop.placeholder.api.ApiModule
+import com.nicholasworkshop.placeholder.fragment.AlbumFragment
 import com.nicholasworkshop.placeholder.fragment.UserFragment
 import dagger.Component
 import javax.inject.Singleton
@@ -13,4 +14,6 @@ import javax.inject.Singleton
 interface MainComponent {
 
     fun inject(userFragment: UserFragment)
+
+    fun inject(userFragment: AlbumFragment)
 }

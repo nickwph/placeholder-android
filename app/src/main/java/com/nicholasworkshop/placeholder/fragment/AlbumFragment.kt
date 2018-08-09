@@ -91,7 +91,7 @@ class AlbumFragment : Fragment() {
                     clickListener { v ->
                         fragmentManager!!.beginTransaction()
                                 .addToBackStack(null)
-//                                .replace(R.id.containerView, HomeTabFragment.newInstance(album.id))
+                                .replace(R.id.contentView, PhotoFragment.newInstance(album.id))
                                 .commit()
                     }
                 }

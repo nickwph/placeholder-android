@@ -1,9 +1,6 @@
 package com.nicholasworkshop.placeholder.fragment
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -17,6 +14,7 @@ import com.nicholasworkshop.placeholder.model.Album
 import com.nicholasworkshop.placeholder.model.AlbumDao
 import com.nicholasworkshop.placeholder.model.MainDatabase
 import com.nicholasworkshop.placeholder.model.adapter.parse
+import com.nicholasworkshop.placeholder.utility.DaoViewModel
 import com.nicholasworkshop.placeholder.viewAlbumItem
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_album.*
@@ -41,7 +39,7 @@ class AlbumFragment : Fragment() {
     @Inject lateinit var albumService: AlbumService
     @Inject lateinit var mainDatabase: MainDatabase
 
-    private lateinit var viewModel: AlbumViewModel
+    private lateinit var viewModel: DaoViewModel<AlbumDao>
     private val albumController = AlbumEpoxyController()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,29 +54,13 @@ class AlbumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val userId = arguments?.getLong(ARG_ID)!!
         epoxyRecyclerView.setController(albumController)
-        viewModel = ViewModelProviders
-                .of(this, AlbumViewModel.Factory(mainDatabase.albumDao()))
-                .get(AlbumViewModel::class.java)
-        viewModel.albumDao.findByUserId(userId).observe(this, Observer {
+        viewModel = DaoViewModel.newInstance(this, AlbumDao::class.java, mainDatabase.albumDao())
+        viewModel.dao.findByUserId(userId).observe(this, Observer {
             albumController.setData(it)
         })
         albumService.getAlbumList()
                 .subscribeOn(Schedulers.io())
                 .subscribe { mainDatabase.albumDao().insertAll(parse(it)) }
-    }
-
-    class AlbumViewModel(
-            val albumDao: AlbumDao
-    ) : ViewModel() {
-
-        @Suppress("UNCHECKED_CAST")
-        class Factory(
-                private val albumDao: AlbumDao
-        ) : ViewModelProvider.NewInstanceFactory() {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return AlbumViewModel(albumDao) as T
-            }
-        }
     }
 
     inner class AlbumEpoxyController : TypedEpoxyController<List<Album>>() {

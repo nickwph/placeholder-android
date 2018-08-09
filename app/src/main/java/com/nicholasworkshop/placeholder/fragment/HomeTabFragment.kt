@@ -16,6 +16,7 @@ import com.nicholasworkshop.placeholder.MainApplication
 import com.nicholasworkshop.placeholder.R
 import com.nicholasworkshop.placeholder.model.MainDatabase
 import com.nicholasworkshop.placeholder.model.UserDao
+import com.nicholasworkshop.placeholder.utility.DaoViewModel
 import kotlinx.android.synthetic.main.fragment_hometab.*
 import javax.inject.Inject
 
@@ -37,7 +38,7 @@ class HomeTabFragment : Fragment() {
 
     @Inject lateinit var mainDatabase: MainDatabase
 
-    private lateinit var viewModel: UserViewModel
+    private lateinit var viewModel: DaoViewModel<UserDao>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,10 +53,8 @@ class HomeTabFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val userId = arguments!!.getLong(ARG_ID)
         bottomNavigationView.setOnNavigationItemSelectedListener(NavigationItemSelectedListener())
-        viewModel = ViewModelProviders
-                .of(this, UserViewModel.Factory(mainDatabase.userDao()))
-                .get(UserViewModel::class.java)
-        viewModel.userDao.findById(userId).observe(this, Observer {
+        viewModel = DaoViewModel.newInstance(this, UserDao::class.java, mainDatabase.userDao())
+        viewModel.dao.findById(userId).observe(this, Observer {
             (activity as AppCompatActivity).supportActionBar!!.title = it?.name
         })
         childFragmentManager.beginTransaction()
@@ -93,20 +92,6 @@ class HomeTabFragment : Fragment() {
                 }
             }
             return false
-        }
-    }
-
-    class UserViewModel(
-            val userDao: UserDao
-    ) : ViewModel() {
-
-        @Suppress("UNCHECKED_CAST")
-        class Factory(
-                private val userDao: UserDao
-        ) : ViewModelProvider.NewInstanceFactory() {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return UserViewModel(userDao) as T
-            }
         }
     }
 }

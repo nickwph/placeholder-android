@@ -3,7 +3,6 @@ package com.nicholasworkshop.placeholder.fragment
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -18,6 +17,7 @@ import com.nicholasworkshop.placeholder.model.MainDatabase
 import com.nicholasworkshop.placeholder.model.User
 import com.nicholasworkshop.placeholder.model.UserDao
 import com.nicholasworkshop.placeholder.model.adapter.parse
+import com.nicholasworkshop.placeholder.utility.DaoViewModel
 import com.nicholasworkshop.placeholder.viewUserItem
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_user.*
@@ -28,7 +28,7 @@ class UserFragment : Fragment() {
     @Inject lateinit var userService: UserService
     @Inject lateinit var mainDatabase: MainDatabase
 
-    private lateinit var viewModel: UserViewModel
+    private lateinit var viewModel: DaoViewModel<UserDao>
     private val userController = UserEpoxyController()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,10 +43,8 @@ class UserFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (activity as AppCompatActivity).supportActionBar!!.title = "Select a user"
         epoxyRecyclerView.setController(userController)
-        viewModel = ViewModelProviders
-                .of(this, UserViewModel.Factory(mainDatabase.userDao()))
-                .get(UserViewModel::class.java)
-        viewModel.userDao.all().observe(this, Observer {
+        viewModel = DaoViewModel.newInstance(this, UserDao::class.java, mainDatabase.userDao())
+        viewModel.dao.all().observe(this, Observer {
             userController.setData(it)
         })
         userService.getUserList()

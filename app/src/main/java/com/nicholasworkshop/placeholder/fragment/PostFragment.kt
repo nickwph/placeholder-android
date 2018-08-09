@@ -16,7 +16,9 @@ import com.nicholasworkshop.placeholder.api.PostService
 import com.nicholasworkshop.placeholder.model.Post
 import com.nicholasworkshop.placeholder.model.PostDao
 import com.nicholasworkshop.placeholder.model.MainDatabase
+import com.nicholasworkshop.placeholder.model.UserDao
 import com.nicholasworkshop.placeholder.model.adapter.parse
+import com.nicholasworkshop.placeholder.utility.DaoViewModel
 import com.nicholasworkshop.placeholder.viewPostItem
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_post.*
@@ -41,7 +43,7 @@ class PostFragment : Fragment() {
     @Inject lateinit var postService: PostService
     @Inject lateinit var mainDatabase: MainDatabase
 
-    private lateinit var viewModel: PostViewModel
+    private lateinit var viewModel: DaoViewModel<PostDao>
     private val postController = PostEpoxyController()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,29 +58,13 @@ class PostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val userId = arguments?.getLong(ARG_ID)!!
         epoxyRecyclerView.setController(postController)
-        viewModel = ViewModelProviders
-                .of(this, PostViewModel.Factory(mainDatabase.postDao()))
-                .get(PostViewModel::class.java)
-        viewModel.postDao.findByUserId(userId).observe(this, Observer {
+        viewModel = DaoViewModel.newInstance(this, PostDao::class.java, mainDatabase.postDao())
+        viewModel.dao.findByUserId(userId).observe(this, Observer {
             postController.setData(it)
         })
         postService.getPostList()
                 .subscribeOn(Schedulers.io())
                 .subscribe { mainDatabase.postDao().insertAll(parse(it)) }
-    }
-
-    class PostViewModel(
-            val postDao: PostDao
-    ) : ViewModel() {
-
-        @Suppress("UNCHECKED_CAST")
-        class Factory(
-                private val postDao: PostDao
-        ) : ViewModelProvider.NewInstanceFactory() {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return PostViewModel(postDao) as T
-            }
-        }
     }
 
     inner class PostEpoxyController : TypedEpoxyController<List<Post>>() {

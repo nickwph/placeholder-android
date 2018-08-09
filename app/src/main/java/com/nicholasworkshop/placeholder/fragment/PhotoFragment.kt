@@ -22,8 +22,8 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_photo.*
 import javax.inject.Inject
 import android.support.v7.widget.GridLayoutManager
-
-
+import com.nicholasworkshop.placeholder.model.PostDao
+import com.nicholasworkshop.placeholder.utility.DaoViewModel
 
 
 class PhotoFragment : Fragment() {
@@ -44,7 +44,7 @@ class PhotoFragment : Fragment() {
     @Inject lateinit var photoService: PhotoService
     @Inject lateinit var mainDatabase: MainDatabase
 
-    private lateinit var viewModel: PhotoViewModel
+    private lateinit var viewModel: DaoViewModel<PhotoDao>
     private val photoController = PhotoEpoxyController()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,29 +64,13 @@ class PhotoFragment : Fragment() {
         epoxyRecyclerView.setController(photoController)
         layoutManager.spanSizeLookup = photoController.spanSizeLookup
         epoxyRecyclerView.layoutManager = layoutManager
-        viewModel = ViewModelProviders
-                .of(this, PhotoViewModel.Factory(mainDatabase.photoDao()))
-                .get(PhotoViewModel::class.java)
-        viewModel.photoDao.findByAlbumId(albumId).observe(this, Observer {
+        viewModel = DaoViewModel.newInstance(this, PhotoDao::class.java, mainDatabase.photoDao())
+        viewModel.dao.findByAlbumId(albumId).observe(this, Observer {
             photoController.setData(it)
         })
         photoService.getPhotoList()
                 .subscribeOn(Schedulers.io())
                 .subscribe { mainDatabase.photoDao().insertAll(parse(it)) }
-    }
-
-    class PhotoViewModel(
-            val photoDao: PhotoDao
-    ) : ViewModel() {
-
-        @Suppress("UNCHECKED_CAST")
-        class Factory(
-                private val photoDao: PhotoDao
-        ) : ViewModelProvider.NewInstanceFactory() {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return PhotoViewModel(photoDao) as T
-            }
-        }
     }
 
     inner class PhotoEpoxyController : TypedEpoxyController<List<Photo>>() {

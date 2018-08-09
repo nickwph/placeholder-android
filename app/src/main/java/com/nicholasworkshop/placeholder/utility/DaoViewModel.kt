@@ -10,7 +10,7 @@ import android.support.v4.app.Fragment
 class DaoViewModel<Dao>(val dao: Dao) : ViewModel() {
 
     companion object {
-        fun <D, VM : DaoViewModel<D>> newInstance(fragment: Fragment, dao: D, daoClass: Class<D>): VM {
+        fun <D, VM : DaoViewModel<D>> newInstance(fragment: Fragment, daoClass: Class<D>, dao: D): VM {
             return ViewModelProviders
                     .of(fragment, DaoViewModel.Factory(dao))
                     .get(DaoViewModel::class.java) as VM

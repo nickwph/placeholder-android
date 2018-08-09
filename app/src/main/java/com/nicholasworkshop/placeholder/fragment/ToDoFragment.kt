@@ -54,7 +54,7 @@ class ToDoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val userId = arguments?.getLong(ARG_ID)!!
         epoxyRecyclerView.setController(toDoController)
-        viewModel = DaoViewModel.newInstance(this, mainDatabase.toDoDao(), ToDoDao::class.java)
+        viewModel = DaoViewModel.newInstance(this, ToDoDao::class.java, mainDatabase.toDoDao())
         viewModel.dao.findByUserId(userId).observe(this, Observer {
             toDoController.setData(it)
         })

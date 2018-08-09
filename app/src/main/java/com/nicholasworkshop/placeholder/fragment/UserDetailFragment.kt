@@ -1,9 +1,6 @@
 package com.nicholasworkshop.placeholder.fragment
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +10,7 @@ import com.nicholasworkshop.placeholder.MainApplication
 import com.nicholasworkshop.placeholder.databinding.FragmentUserdetailBinding
 import com.nicholasworkshop.placeholder.model.MainDatabase
 import com.nicholasworkshop.placeholder.model.UserDao
+import com.nicholasworkshop.placeholder.utility.DaoViewModel
 import javax.inject.Inject
 
 
@@ -33,7 +31,7 @@ class UserDetailFragment : Fragment() {
 
     @Inject lateinit var mainDatabase: MainDatabase
 
-    private lateinit var viewModel: UserDetailViewModel
+    private lateinit var viewModel: DaoViewModel<UserDao>
     private lateinit var binding: FragmentUserdetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,27 +46,10 @@ class UserDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val userId = arguments?.getLong(ARG_ID)!!
-        viewModel = ViewModelProviders
-                .of(this, UserDetailViewModel.Factory(mainDatabase.userDao()))
-                .get(UserDetailViewModel::class.java)
-        viewModel.userDao.findById(userId).observe(this, Observer {
+        viewModel = DaoViewModel.newInstance(this, UserDao::class.java, mainDatabase.userDao())
+        viewModel.dao.findById(userId).observe(this, Observer {
             binding.user = it
             binding.executePendingBindings()
         })
-//        UserDetailViewModel::javaClass.
-    }
-
-    class UserDetailViewModel(
-            val userDao: UserDao
-    ) : ViewModel() {
-
-        @Suppress("UNCHECKED_CAST")
-        class Factory(
-                private val userDao: UserDao
-        ) : ViewModelProvider.NewInstanceFactory() {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return UserDetailViewModel(userDao) as T
-            }
-        }
     }
 }

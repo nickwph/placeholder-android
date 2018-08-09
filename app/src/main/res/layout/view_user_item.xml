@@ -7,6 +7,9 @@
         <variable
             name="user"
             type="com.nicholasworkshop.placeholder.api.User" />
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <LinearLayout
@@ -14,6 +17,7 @@
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
         android:orientation="vertical"
+        android:onClick="@{clickListener}"
         android:padding="8dp">
 
         <TextView

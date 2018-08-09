@@ -1,9 +1,6 @@
 package com.nicholasworkshop.placeholder.fragment
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -17,6 +14,7 @@ import com.nicholasworkshop.placeholder.model.MainDatabase
 import com.nicholasworkshop.placeholder.model.ToDo
 import com.nicholasworkshop.placeholder.model.ToDoDao
 import com.nicholasworkshop.placeholder.model.adapter.parse
+import com.nicholasworkshop.placeholder.utility.DaoViewModel
 import com.nicholasworkshop.placeholder.viewTodoItem
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_todo.*
@@ -41,7 +39,7 @@ class ToDoFragment : Fragment() {
     @Inject lateinit var toDoService: ToDoService
     @Inject lateinit var mainDatabase: MainDatabase
 
-    private lateinit var viewModel: ToDoViewModel
+    private lateinit var viewModel: DaoViewModel<ToDoDao>
     private val toDoController = ToDoEpoxyController()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,29 +54,13 @@ class ToDoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val userId = arguments?.getLong(ARG_ID)!!
         epoxyRecyclerView.setController(toDoController)
-        viewModel = ViewModelProviders
-                .of(this, ToDoViewModel.Factory(mainDatabase.toDoDao()))
-                .get(ToDoViewModel::class.java)
-        viewModel.toDoDao.findByUserId(userId).observe(this, Observer {
+        viewModel = DaoViewModel.newInstance(this, mainDatabase.toDoDao(), ToDoDao::class.java)
+        viewModel.dao.findByUserId(userId).observe(this, Observer {
             toDoController.setData(it)
         })
         toDoService.getToDoList()
                 .subscribeOn(Schedulers.io())
                 .subscribe { mainDatabase.toDoDao().insertAll(parse(it)) }
-    }
-
-    class ToDoViewModel(
-            val toDoDao: ToDoDao
-    ) : ViewModel() {
-
-        @Suppress("UNCHECKED_CAST")
-        class Factory(
-                private val toDoDao: ToDoDao
-        ) : ViewModelProvider.NewInstanceFactory() {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return ToDoViewModel(toDoDao) as T
-            }
-        }
     }
 
     inner class ToDoEpoxyController : TypedEpoxyController<List<ToDo>>() {

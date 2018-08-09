@@ -55,6 +55,7 @@ class UserDetailFragment : Fragment() {
             binding.user = it
             binding.executePendingBindings()
         })
+//        UserDetailViewModel::javaClass.
     }
 
     class UserDetailViewModel(

@@ -38,7 +38,7 @@ class HomeTabFragment : Fragment() {
     }
 
     @Inject lateinit var mainDatabase: MainDatabase
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity!!.application as MainApplication).component.inject(this)
@@ -53,7 +53,7 @@ class HomeTabFragment : Fragment() {
         val userId = arguments!!.getLong(ARG_ID)
         bottomNavigationView.setOnNavigationItemSelectedListener(NavigationItemSelectedListener())
         bottomNavigationView.disableShiftMode()
-        childFragmentManager.beginTransaction()
+        fragmentManager!!.beginTransaction()
                 .replace(R.id.contentView, UserDetailFragment.newInstance(userId))
                 .commit()
     }
@@ -63,25 +63,25 @@ class HomeTabFragment : Fragment() {
             val userId = arguments!!.getLong(ARG_ID)
             when (item.itemId) {
                 R.id.navigation_home -> {
-                    childFragmentManager.beginTransaction()
+                    fragmentManager!!.beginTransaction()
                             .replace(R.id.contentView, UserDetailFragment.newInstance(userId))
                             .commit()
                     return true
                 }
                 R.id.navigation_albums -> {
-                    childFragmentManager.beginTransaction()
+                    fragmentManager!!.beginTransaction()
                             .replace(R.id.contentView, AlbumFragment.newInstance(userId))
                             .commit()
                     return true
                 }
                 R.id.navigation_posts -> {
-                    childFragmentManager.beginTransaction()
+                    fragmentManager!!.beginTransaction()
                             .replace(R.id.contentView, PostFragment.newInstance(userId))
                             .commit()
                     return true
                 }
                 R.id.navigation_todos -> {
-                    childFragmentManager.beginTransaction()
+                    fragmentManager!!.beginTransaction()
                             .replace(R.id.contentView, ToDoFragment.newInstance(userId))
                             .commit()
                     return true

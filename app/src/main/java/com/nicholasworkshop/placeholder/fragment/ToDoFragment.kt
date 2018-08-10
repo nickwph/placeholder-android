@@ -72,12 +72,6 @@ class ToDoFragment : Fragment() {
                 viewTodoItem {
                     id(toDo.id)
                     toDo(toDo)
-                    clickListener { v ->
-                        fragmentManager!!.beginTransaction()
-                                .addToBackStack(null)
-                                .replace(R.id.contentView, PhotoFragment.newInstance(toDo.id))
-                                .commit()
-                    }
                 }
             }
         }

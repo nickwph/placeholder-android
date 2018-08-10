@@ -96,14 +96,14 @@ class CommentFragment : Fragment() {
         override fun buildModels(post: Post?, comments: List<Comment>?) {
             if (post != null) {
                 viewPostItem {
-                    id(post.id)
+                    id("post-${post.id}")
                     post(post)
                 }
             }
             if (comments != null) {
                 for (comment in comments) {
                     viewCommentItem {
-                        id(comment.id)
+                        id("comment-${comment.id}")
                         comment(comment)
                     }
                 }

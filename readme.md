@@ -29,6 +29,9 @@ inserted into the database, and which will also trigger changes in the UI.
 
 ### CI integration
 
+This project is integrated with CircleCI and will build and test project whenever there are 
+updates to the code base.
+
 ## To-do list
 
 [ ] Create posts / comments / albums / todos

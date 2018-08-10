@@ -2,6 +2,10 @@
 
 [![CircleCI](https://circleci.com/gh/nickwph/placeholder-android.svg?style=shield)](https://circleci.com/gh/nickwph/placeholder-android)
 
+## Demo video
+
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/1oVEgwCw6nE/0.jpg)](http://www.youtube.com/watch?v=1oVEgwCw6nE "Placeholder demo")
+
 ## Features
 
 ### Application flow

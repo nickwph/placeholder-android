@@ -38,6 +38,6 @@ updates to the code base.
 
 ## To-do list
 
-[ ] Create posts / comments / albums / todos
-[ ] Upload photos
-[ ] More unit tests with Robolectric
+- [ ] Create posts / comments / albums / todos
+- [ ] Upload photos
+- [ ] More unit tests with Robolectric

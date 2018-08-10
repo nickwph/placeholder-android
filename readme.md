@@ -1,5 +1,7 @@
 # Android App for Placeholder
 
+[![CircleCI](https://circleci.com/gh/nickwph/placeholder-android.svg?style=shield)](https://circleci.com/gh/nickwph/placeholder-android)
+
 ## Features
 
 ### Application flow
@@ -26,6 +28,8 @@ inserted into the database, and which will also trigger changes in the UI.
 - Retrofit, RxJava and Jackson for network abstractions
 - Dagger for dependency injection
 - JUnit5 and AssertJ for unit tests
+- Room for local database
+- Databinding for better UI layouts
 
 ### CI integration
 

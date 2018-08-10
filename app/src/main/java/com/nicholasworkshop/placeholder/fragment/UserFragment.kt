@@ -19,6 +19,7 @@ import com.nicholasworkshop.placeholder.model.User
 import com.nicholasworkshop.placeholder.model.UserDao
 import com.nicholasworkshop.placeholder.model.adapter.parse
 import com.nicholasworkshop.placeholder.utility.DaoViewModel
+import com.nicholasworkshop.placeholder.utility.SimpleDividerItemDecoration
 import com.nicholasworkshop.placeholder.viewUserItem
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_user.*
@@ -45,6 +46,7 @@ class UserFragment : Fragment() {
         (activity as AppCompatActivity).supportActionBar!!.title = "Select a user"
         epoxyRecyclerView.setController(userController)
         epoxyRecyclerView.layoutManager = LinearLayoutManager(context)
+        epoxyRecyclerView.addItemDecoration(SimpleDividerItemDecoration(context!!))
         viewModel = DaoViewModel.newInstance(this, UserDao::class.java, mainDatabase.userDao())
         viewModel.dao.all().observe(this, Observer {
             userController.setData(it)

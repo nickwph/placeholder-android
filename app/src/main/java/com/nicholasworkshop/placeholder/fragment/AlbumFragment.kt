@@ -17,6 +17,7 @@ import com.nicholasworkshop.placeholder.model.AlbumDao
 import com.nicholasworkshop.placeholder.model.MainDatabase
 import com.nicholasworkshop.placeholder.model.adapter.parse
 import com.nicholasworkshop.placeholder.utility.DaoViewModel
+import com.nicholasworkshop.placeholder.utility.SimpleDividerItemDecoration
 import com.nicholasworkshop.placeholder.viewAlbumItem
 import io.reactivex.Observable.fromCallable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -60,6 +61,7 @@ class AlbumFragment : Fragment() {
         val userId = arguments?.getLong(ARG_ID)!!
         epoxyRecyclerView.setController(albumController)
         epoxyRecyclerView.layoutManager = LinearLayoutManager(context)
+        epoxyRecyclerView.addItemDecoration(SimpleDividerItemDecoration(context!!))
         fromCallable { mainDatabase.userDao().findByIdSync(userId) }
                 .subscribeOn(io())
                 .observeOn(AndroidSchedulers.mainThread())

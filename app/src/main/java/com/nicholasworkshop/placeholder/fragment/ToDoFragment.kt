@@ -17,6 +17,7 @@ import com.nicholasworkshop.placeholder.model.ToDo
 import com.nicholasworkshop.placeholder.model.ToDoDao
 import com.nicholasworkshop.placeholder.model.adapter.parse
 import com.nicholasworkshop.placeholder.utility.DaoViewModel
+import com.nicholasworkshop.placeholder.utility.SimpleDividerItemDecoration
 import com.nicholasworkshop.placeholder.viewTodoItem
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -59,6 +60,7 @@ class ToDoFragment : Fragment() {
         val userId = arguments?.getLong(ARG_ID)!!
         epoxyRecyclerView.setController(toDoController)
         epoxyRecyclerView.layoutManager = LinearLayoutManager(context)
+        epoxyRecyclerView.addItemDecoration(SimpleDividerItemDecoration(context!!))
         Observable.fromCallable { mainDatabase.userDao().findByIdSync(userId) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

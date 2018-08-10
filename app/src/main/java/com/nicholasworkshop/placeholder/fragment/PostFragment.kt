@@ -17,6 +17,7 @@ import com.nicholasworkshop.placeholder.model.Post
 import com.nicholasworkshop.placeholder.model.PostDao
 import com.nicholasworkshop.placeholder.model.adapter.parse
 import com.nicholasworkshop.placeholder.utility.DaoViewModel
+import com.nicholasworkshop.placeholder.utility.SimpleDividerItemDecoration
 import com.nicholasworkshop.placeholder.viewPostItem
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -59,6 +60,7 @@ class PostFragment : Fragment() {
         val userId = arguments?.getLong(ARG_ID)!!
         epoxyRecyclerView.setController(postController)
         epoxyRecyclerView.layoutManager = LinearLayoutManager(context)
+        epoxyRecyclerView.addItemDecoration(SimpleDividerItemDecoration(context!!))
         Observable.fromCallable { mainDatabase.userDao().findByIdSync(userId) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

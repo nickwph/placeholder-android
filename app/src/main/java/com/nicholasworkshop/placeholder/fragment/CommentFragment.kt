@@ -8,15 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.epoxy.Typed2EpoxyController
-import com.nicholasworkshop.placeholder.MainApplication
-import com.nicholasworkshop.placeholder.R
+import com.nicholasworkshop.placeholder.*
 import com.nicholasworkshop.placeholder.api.CommentService
 import com.nicholasworkshop.placeholder.api.PostService
 import com.nicholasworkshop.placeholder.model.*
 import com.nicholasworkshop.placeholder.model.adapter.parse
 import com.nicholasworkshop.placeholder.utility.Dao2ViewModel
-import com.nicholasworkshop.placeholder.viewCommentItem
-import com.nicholasworkshop.placeholder.viewPostItem
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_post.*
 import javax.inject.Inject
@@ -99,6 +96,9 @@ class CommentFragment : Fragment() {
                     id("post-${post.id}")
                     post(post)
                 }
+            }
+            viewCommentItemHeader {
+                id("header")
             }
             if (comments != null) {
                 for (comment in comments) {

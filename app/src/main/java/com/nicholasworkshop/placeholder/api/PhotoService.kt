@@ -12,18 +12,18 @@ interface PhotoService {
 
     @GET("/photos/{id}")
     fun getPhoto(
-            @Path("id") id: String
-    ): List<Photo>
+            @Path("id") id: Long
+    ): Observable<Photo>
 
     @POST("/photos")
     fun createPhoto(
             @Body body: Photo
     ): Observable<Photo>
-}
 
-data class Photo(
-        val id: Long? = null,
-        val albumId: Long? = null,
-        val title: String? = null,
-        val url: String? = null,
-        val thumbnailUrl: String? = null)
+    data class Photo(
+            val id: Long? = null,
+            val albumId: Long? = null,
+            val title: String? = null,
+            val url: String? = null,
+            val thumbnailUrl: String? = null)
+}

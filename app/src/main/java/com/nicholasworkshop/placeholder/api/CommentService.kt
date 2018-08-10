@@ -12,18 +12,18 @@ interface CommentService {
 
     @GET("/comments/{id}")
     fun getComment(
-            @Path("id") id: String
-    ): List<Comment>
+            @Path("id") id: Long
+    ): Observable<Comment>
 
     @POST("/comments")
     fun createComment(
             @Body body: Comment
     ): Observable<Comment>
-}
 
-data class Comment(
-        val id: Long? = null,
-        val postId: Long? = null,
-        val name: String? = null,
-        val email: String? = null,
-        val body: String? = null)
+    data class Comment(
+            val id: Long? = null,
+            val postId: Long? = null,
+            val name: String? = null,
+            val email: String? = null,
+            val body: String? = null)
+}

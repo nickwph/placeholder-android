@@ -12,16 +12,16 @@ interface AlbumService {
 
     @GET("/albums/{id}")
     fun getAlbum(
-            @Path("id") id: String
-    ): List<Album>
+            @Path("id") id: Long
+    ): Observable<Album>
 
     @POST("/albums")
     fun createAlbum(
             @Body body: Album
     ): Observable<Album>
-}
 
-data class Album(
-        val id: Long? = null,
-        val userId: Long? = null,
-        val title: String? = null)
+    data class Album(
+            val id: Long? = null,
+            val userId: Long? = null,
+            val title: String? = null)
+}

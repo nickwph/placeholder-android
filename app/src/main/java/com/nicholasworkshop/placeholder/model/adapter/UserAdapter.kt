@@ -2,7 +2,7 @@ package com.nicholasworkshop.placeholder.model.adapter
 
 import com.nicholasworkshop.placeholder.model.User
 
-fun parse(user: com.nicholasworkshop.placeholder.api.User): User {
+fun parse(user: com.nicholasworkshop.placeholder.api.UserService.User): User {
     return User(
             id = user.id!!,
             name = user.name,
@@ -21,6 +21,6 @@ fun parse(user: com.nicholasworkshop.placeholder.api.User): User {
             addressGeoLng = user.address?.geo?.lng)
 }
 
-fun parse(userList: List<com.nicholasworkshop.placeholder.api.User>): List<User> {
+fun parse(userList: List<com.nicholasworkshop.placeholder.api.UserService.User>): List<User> {
     return userList.map(::parse)
 }

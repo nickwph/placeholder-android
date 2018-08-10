@@ -12,17 +12,17 @@ interface ToDoService {
 
     @GET("/todos/{id}")
     fun getToDo(
-            @Path("id") id: String
-    ): List<ToDo>
+            @Path("id") id: Long
+    ): Observable<ToDo>
 
     @POST("/todos")
     fun createToDo(
             @Body body: ToDo
     ): Observable<ToDo>
-}
 
-data class ToDo(
-        val id: Long? = null,
-        val userId: Long? = null,
-        val title: String? = null,
-        val completed: Boolean? = null)
+    data class ToDo(
+            val id: Long? = null,
+            val userId: Long? = null,
+            val title: String? = null,
+            val completed: Boolean? = null)
+}

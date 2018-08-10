@@ -2,7 +2,7 @@ package com.nicholasworkshop.placeholder.model.adapter
 
 import com.nicholasworkshop.placeholder.model.Comment
 
-fun parse(comment: com.nicholasworkshop.placeholder.api.Comment): Comment {
+fun parse(comment: com.nicholasworkshop.placeholder.api.CommentService.Comment): Comment {
     return Comment(
             id = comment.id!!,
             postId = comment.postId,
@@ -11,6 +11,6 @@ fun parse(comment: com.nicholasworkshop.placeholder.api.Comment): Comment {
             body = comment.body)
 }
 
-fun parse(postList: List<com.nicholasworkshop.placeholder.api.Comment>): List<Comment> {
+fun parse(postList: List<com.nicholasworkshop.placeholder.api.CommentService.Comment>): List<Comment> {
     return postList.map(::parse)
 }

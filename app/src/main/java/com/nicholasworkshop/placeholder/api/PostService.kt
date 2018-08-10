@@ -12,17 +12,17 @@ interface PostService {
 
     @GET("/posts/{id}")
     fun getPost(
-            @Path("id") id: String
-    ): List<Post>
+            @Path("id") id: Long
+    ): Observable<Post>
 
     @POST("/posts")
     fun createPost(
             @Body body: Post
     ): Observable<Post>
-}
 
-data class Post(
-        val id: Long? = null,
-        val userId: Long? = null,
-        val title: String? = null,
-        val body: String? = null)
+    data class Post(
+            val id: Long? = null,
+            val userId: Long? = null,
+            val title: String? = null,
+            val body: String? = null)
+}

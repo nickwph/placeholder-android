@@ -1,6 +1,6 @@
 buildscript {
     ext.roomVersion = '1.1.1'
-    ext.kotlinVersion = '1.2.51'
+    ext.kotlinVersion = '1.2.60'
     ext.androidSupportVersion = '27.1.1'
     repositories {
         google()

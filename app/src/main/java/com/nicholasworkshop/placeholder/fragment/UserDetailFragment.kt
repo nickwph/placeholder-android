@@ -3,6 +3,7 @@ package com.nicholasworkshop.placeholder.fragment
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,9 @@ import com.nicholasworkshop.placeholder.databinding.FragmentUserdetailBinding
 import com.nicholasworkshop.placeholder.model.MainDatabase
 import com.nicholasworkshop.placeholder.model.UserDao
 import com.nicholasworkshop.placeholder.utility.DaoViewModel
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -47,6 +51,10 @@ class UserDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val userId = arguments?.getLong(ARG_ID)!!
+        Observable.fromCallable { mainDatabase.userDao().findByIdSync(userId) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { (activity as AppCompatActivity).supportActionBar!!.title = "${it?.name}" }
         viewModel = DaoViewModel.newInstance(this, UserDao::class.java, mainDatabase.userDao())
         viewModel.dao.findById(userId).observe(this, Observer {
             binding.user = it

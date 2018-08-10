@@ -3,6 +3,7 @@ package com.nicholasworkshop.placeholder.fragment
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +18,10 @@ import com.nicholasworkshop.placeholder.model.MainDatabase
 import com.nicholasworkshop.placeholder.model.adapter.parse
 import com.nicholasworkshop.placeholder.utility.DaoViewModel
 import com.nicholasworkshop.placeholder.viewAlbumItem
+import io.reactivex.Observable.fromCallable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.schedulers.Schedulers.io
 import kotlinx.android.synthetic.main.fragment_album.*
 import javax.inject.Inject
 
@@ -56,6 +60,10 @@ class AlbumFragment : Fragment() {
         val userId = arguments?.getLong(ARG_ID)!!
         epoxyRecyclerView.setController(albumController)
         epoxyRecyclerView.layoutManager = LinearLayoutManager(context)
+        fromCallable { mainDatabase.userDao().findByIdSync(userId) }
+                .subscribeOn(io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { (activity as AppCompatActivity).supportActionBar!!.title = "${it?.name}'s albums" }
         viewModel = DaoViewModel.newInstance(this, AlbumDao::class.java, mainDatabase.albumDao())
         viewModel.dao.findByUserId(userId).observe(this, Observer {
             albumController.setData(it)

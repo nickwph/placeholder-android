@@ -38,9 +38,7 @@ class HomeTabFragment : Fragment() {
     }
 
     @Inject lateinit var mainDatabase: MainDatabase
-
-    private lateinit var viewModel: DaoViewModel<UserDao>
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity!!.application as MainApplication).component.inject(this)
@@ -55,10 +53,6 @@ class HomeTabFragment : Fragment() {
         val userId = arguments!!.getLong(ARG_ID)
         bottomNavigationView.setOnNavigationItemSelectedListener(NavigationItemSelectedListener())
         bottomNavigationView.disableShiftMode()
-        viewModel = DaoViewModel.newInstance(this, UserDao::class.java, mainDatabase.userDao())
-        viewModel.dao.findById(userId).observe(this, Observer {
-            (activity as AppCompatActivity).supportActionBar!!.title = it?.name
-        })
         childFragmentManager.beginTransaction()
                 .replace(R.id.contentView, UserDetailFragment.newInstance(userId))
                 .commit()

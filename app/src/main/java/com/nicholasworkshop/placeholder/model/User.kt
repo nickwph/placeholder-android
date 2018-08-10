@@ -2,10 +2,6 @@ package com.nicholasworkshop.placeholder.model
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Entity
 data class User(
@@ -33,6 +29,9 @@ interface UserDao {
 
     @Query("SELECT * FROM user WHERE id = :id LIMIT 1")
     fun findById(id: Long): LiveData<User>
+
+    @Query("SELECT * FROM user WHERE id = :id LIMIT 1")
+    fun findByIdSync(id: Long): User
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(userList: List<User>): List<Long>

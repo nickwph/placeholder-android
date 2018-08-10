@@ -44,7 +44,7 @@ jobs:
 
       - store_artifacts:
           path: app/build/outputs
-          destination: reports
+          destination: outputs
 
       - store_artifacts:
           path: app/build/reports
